@@ -1,0 +1,22 @@
+{
+  "name": "secureemi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon -r esm app.js",
+    "start": "node -r esm app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@googleapis/androidmanagement": "^4.1.0",
+    "dotenv": "^16.0.1",
+    "esm": "^3.2.25",
+    "express": "^4.18.1",
+    "googleapis": "^105.0.0",
+    "nodemon": "^2.0.19"
+  }
+}
