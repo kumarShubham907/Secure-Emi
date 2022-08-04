@@ -24,6 +24,25 @@ const googleCloudApi = {
             }
         })
         res.json({ message: 'reboot successfull', data: reboot.data })
+    },
+
+    async lockDeviceApp(req, res, next) {
+        const authClient = await Auth.getClient();
+        google.options({ auth: authClient });
+
+        const lock = await androidManagement.enterprises.policies.patch({
+            name: "enterprises/LC03o7l0pz/policies/daishygoyal",
+            updateMask: "applications",
+            requestBody: {
+                "applications": [
+                    {
+                        "disabled": true,
+                        "packageName": "com.facebook.lite"
+                    }
+                ]
+            }
+        })
+        res.json({ message: 'App Locked Successfull', data: lock })
     }
 }
 export default googleCloudApi
