@@ -1,9 +1,17 @@
 import express from 'express'
-import { Auth } from './middleware/Aut';
-import { REACT_APP_PORT } from './constant/environment';
+import { googleCloudApi } from '../controller'
+const router = express.Router()
 
-const app = express()
+router.get('/', googleCloudApi.getUserList)
+router.get('/restart', googleCloudApi.userDeviceReboot)
 
-app.get('/', (req, res) => {
-    res.send('hello world',Auth)
-})
+export default router
+
+
+
+
+
+
+
+
+

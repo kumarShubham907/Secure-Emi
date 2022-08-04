@@ -1,0 +1,1 @@
+export { default as googleCloudApi } from './auth/apiAuth'
