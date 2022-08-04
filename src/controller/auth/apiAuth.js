@@ -1,9 +1,25 @@
 import { google } from 'googleapis'
 import { Auth } from "../../utils/authKeyScopes";
+import { QRCodeUrl } from './QRCodeLink';
 
 const androidManagement = google.androidmanagement('v1');
 
 const googleCloudApi = {
+
+    async genrateUniqueQR(req, res, next) {
+        const authClient = await Auth.getClient();
+        google.options({ auth: authClient });
+        const enrollmentToken = await androidManagement.enterprises.enrollmentTokens.create({
+            parent: "enterprises/LC03o7l0pz",
+            requestBody: {
+                policyName: "enterprises/LC03o7l0pz/policies/daishygoyal"
+            }
+        })
+        const genratedList = await QRCodeUrl(enrollmentToken)
+       
+        res.json({ message: 'success', data: genratedList })
+    },
+
     async getUserList(req, res, next) {
         const authClient = await Auth.getClient();
         google.options({ auth: authClient });
@@ -46,4 +62,8 @@ const googleCloudApi = {
     }
 }
 export default googleCloudApi
+
+
+
+
 
