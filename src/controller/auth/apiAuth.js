@@ -26,7 +26,7 @@ const googleCloudApi = {
             updateMask: 'applications',
             requestBody: policy_json
         })
-        console.log("policyName",createPolicies.data.name)
+
         //                  Create Policies End                //
 
         const enrollmentToken = await androidManagement.enterprises.enrollmentTokens.create({
@@ -35,7 +35,7 @@ const googleCloudApi = {
                 policyName: `${createPolicies.data.name}`
             }
         })
-       const genratedList = await QRCodeUrl(enrollmentToken)
+        const genratedList = await QRCodeUrl(enrollmentToken)
 
         res.json({ message: 'success', data: genratedList })
     },
