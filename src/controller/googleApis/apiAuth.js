@@ -11,7 +11,7 @@ const googleCloudApi = {
         google.options({ auth: authClient });
         const policyName = `enterprises/LC03o7l0pz/policies/policyId_${new Date().getTime().toString()}`
         //                  Create Policies                 //
-        const policy_json = {
+        const policyJson = {
             "applications": [
                 {
                     "packageName": "com.google.samples.apps.iosched",
@@ -24,7 +24,7 @@ const googleCloudApi = {
         const createPolicies = await androidManagement.enterprises.policies.patch({
             name: `${policyName}`,
             updateMask: 'applications',
-            requestBody: policy_json
+            requestBody: policyJson
         })
 
         //                  Create Policies End                //
@@ -59,7 +59,7 @@ const googleCloudApi = {
                 type: "REBOOT"
             }
         })
-        res.json({ message: 'reboot successfull', data: reboot.data })
+        res.json({ message: 'Reboot successfull', data: reboot.data })
     },
 
     async lockDeviceApp(req, res, next) {
@@ -79,6 +79,26 @@ const googleCloudApi = {
             }
         })
         res.json({ message: 'App Locked Successfull', data: lockApp })
+    },
+
+    async lockDevice(req, res, next) {
+        const authClient = await Auth.getClient();
+        google.options({ auth: authClient });
+
+        const lockApp = await androidManagement.enterprises.policies.patch({
+            name: "enterprises/LC03o7l0pz/policies/daishygoyal",
+            updateMask: "applications",
+            requestBody: {
+                installAppsDisabled: true,
+                kioskCustomLauncherEnabled: true,
+                kioskCustomization: {
+                  powerButtonActions: "POWER_BUTTON_BLOCKED",
+                  systemNavigation: "HOME_BUTTON_ONLY",
+                  statusBar: "SYSTEM_INFO_ONLY"
+                }
+              }
+        })
+        res.json({ message: 'Device Locked Successfull', data: lockApp })
     }
 }
 export default googleCloudApi
