@@ -1,4 +1,3 @@
-
 import jwt_decode from "jwt-decode";
 
 async function AuthMiddleware(req, res, next) {

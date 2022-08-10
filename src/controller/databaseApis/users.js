@@ -28,12 +28,10 @@ const getUserList = {
         })
     },
 
-
     async login(req, res) {
         User.findOne({
             mobileNo: req.body.mobileNo,
         })
-            .populate("roles", "-__v")
             .exec((err, user) => {
                 if (err) {
                     res.status(500).send({ message: err });
@@ -62,6 +60,5 @@ const getUserList = {
                 });
             });
     }
-
 }
 export default getUserList

@@ -1,5 +1,6 @@
 import { google } from 'googleapis'
 import { Auth } from "../../utils/authKeyScopes";
+import { policyJson } from '../../utils/policyJson';
 import { QRCodeUrl } from './QRCodeLink';
 
 const androidManagement = google.androidmanagement('v1');
@@ -10,20 +11,12 @@ const googleCloudApi = {
         const authClient = await Auth.getClient();
         google.options({ auth: authClient });
         const policyName = `enterprises/LC03o7l0pz/policies/policyId_${new Date().getTime().toString()}`
+
         //                  Create Policies                 //
-        const policyJson = {
-            "applications": [
-                {
-                    "packageName": "com.google.samples.apps.iosched",
-                    "installType": "FORCE_INSTALLED"
-                }
-            ],
-            "debuggingFeaturesAllowed": true
-        }
 
         const createPolicies = await androidManagement.enterprises.policies.patch({
             name: `${policyName}`,
-            updateMask: 'applications',
+            updateMask: 'applications,playStoreMode',
             requestBody: policyJson
         })
 
@@ -54,7 +47,7 @@ const googleCloudApi = {
         google.options({ auth: authClient });
 
         const reboot = await androidManagement.enterprises.devices.issueCommand({
-            name: "enterprises/LC03o7l0pz/devices/31dc21440073fbc1", // new Device Realme 7A plociyId => 369e6387affd0d7a
+            name: "enterprises/LC03o7l0pz/devices/31dc21440073fbc1",
             requestBody: {
                 type: "REBOOT"
             }
@@ -81,24 +74,25 @@ const googleCloudApi = {
         res.json({ message: 'App Locked Successfull', data: lockApp })
     },
 
-    async lockDevice(req, res, next) {
+    async freezDevice(req, res, next) {
         const authClient = await Auth.getClient();
         google.options({ auth: authClient });
 
-        const lockApp = await androidManagement.enterprises.policies.patch({
-            name: "enterprises/LC03o7l0pz/policies/daishygoyal",
-            updateMask: "applications",
+        const freezApp = await androidManagement.enterprises.policies.patch({
+            name: "enterprises/LC03o7l0pz/policies/daishygoyal", // current working on => enterprises/LC03o7l0pz/policies/policyId_1660050004649
+            updateMask: "applications,playStoreMode",
             requestBody: {
-                installAppsDisabled: true,
-                kioskCustomLauncherEnabled: true,
-                kioskCustomization: {
-                  powerButtonActions: "POWER_BUTTON_BLOCKED",
-                  systemNavigation: "HOME_BUTTON_ONLY",
-                  statusBar: "SYSTEM_INFO_ONLY"
-                }
-              }
+                "applications": [
+                    {
+                        "packageName": "com.whatsapp",
+                        "installType": "FORCE_INSTALLED", // FORCE_INSTALLED || KIOSK || BLOCKED
+                        "defaultPermissionPolicy": "GRANT"
+                      }
+                ],
+                "playStoreMode": "BLACKLIST"
+            }
         })
-        res.json({ message: 'Device Locked Successfull', data: lockApp })
+        res.json({ message: 'Device Locked Successfull', data: freezApp })
     }
 }
 export default googleCloudApi
