@@ -5,6 +5,7 @@ export const policyJson = {
             "packageName": "com.whatsapp"
         }
     ],
-    "playStoreMode": "BLACKLIST"
+    "playStoreMode": "BLACKLIST",
+    "factoryResetDisabled": true,
     
 }

@@ -16,7 +16,7 @@ const googleCloudApi = {
 
         const createPolicies = await androidManagement.enterprises.policies.patch({
             name: `${policyName}`,
-            updateMask: 'applications,playStoreMode',
+            updateMask: 'applications,playStoreMode,factoryResetDisabled',
             requestBody: policyJson
         })
 
@@ -52,7 +52,7 @@ const googleCloudApi = {
                 type: "REBOOT"
             }
         })
-        res.json({ message: 'Reboot successfull', data: reboot.data })
+        res.json({ message: 'Reboot Successfull', data: reboot.data })
     },
 
     async lockDeviceApp(req, res, next) {
@@ -79,17 +79,18 @@ const googleCloudApi = {
         google.options({ auth: authClient });
 
         const freezApp = await androidManagement.enterprises.policies.patch({
-            name: "enterprises/LC03o7l0pz/policies/daishygoyal", // current working on => enterprises/LC03o7l0pz/policies/policyId_1660050004649
-            updateMask: "applications,playStoreMode",
+            name: "enterprises/LC03o7l0pz/policies/policyId_1660050004649", // current working on => enterprises/LC03o7l0pz/policies/policyId_1660050004649
+            updateMask: "applications,playStoreMode,factoryResetDisabled",
             requestBody: {
                 "applications": [
                     {
                         "packageName": "com.whatsapp",
                         "installType": "FORCE_INSTALLED", // FORCE_INSTALLED || KIOSK || BLOCKED
                         "defaultPermissionPolicy": "GRANT"
-                      }
+                    }
                 ],
-                "playStoreMode": "BLACKLIST"
+                "playStoreMode": "BLACKLIST",
+                "factoryResetDisabled": true,
             }
         })
         res.json({ message: 'Device Locked Successfull', data: freezApp })
